@@ -13,6 +13,8 @@ public class PlayerScript : MonoBehaviour
     private Rigidbody rb;
     private float distance = 0.72f;
     private bool isCollisionBlock = true;
+
+    public Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,10 +47,16 @@ public class PlayerScript : MonoBehaviour
         if (move < 0)
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
+            animator.SetBool("isWalk", true);
         }
         else if (move > 0)
         {
             transform.rotation = Quaternion.Euler(0, 90, 0);
+            animator.SetBool("isWalk", true);
+        }
+        else
+        {
+            animator.SetBool("isWalk", false);
         }
 
         if (Mathf.Abs(rb.velocity.x) < moveSpeed)
