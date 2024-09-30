@@ -7,7 +7,8 @@ public class PlayerScript : MonoBehaviour
 {
 
     public float jumpForce = 1.0f;
-    public float moveSpeed = 1.0f;
+    public float moveSpeed = 1.0f; // ˆÚ“®‘¬“x
+    public float forceMultiplier = 1f;
     
     private Rigidbody rb;
     private float distance = 0.72f;
@@ -30,15 +31,17 @@ public class PlayerScript : MonoBehaviour
         {
             Jump();
         }
+    }
 
+    private void FixedUpdate()
+    {
         Move();
     }
 
     void Move()
     {
-        Vector3 v = rb.velocity;
         float move = Input.GetAxis("Horizontal");
-
+        
         if (move < 0)
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
@@ -48,8 +51,14 @@ public class PlayerScript : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 90, 0);
         }
 
-        v.x = moveSpeed * move;
-        rb.velocity = v;
+        if (Mathf.Abs(rb.velocity.x) < moveSpeed)
+        {
+            Vector3 force = new Vector3(move * forceMultiplier, 0, 0);
+            rb.AddForce(force, ForceMode.Force);
+        }
+        Vector3 velocity = rb.velocity;
+        velocity.x = Mathf.Clamp(velocity.x, -moveSpeed, moveSpeed);
+        rb.velocity = velocity;
     }
 
     void Jump()
@@ -61,7 +70,6 @@ public class PlayerScript : MonoBehaviour
             if (Input.GetAxis("Jump") != 0)
             {
                 v.y = jumpForce;
-                // animator.SetBool("jump", true);
             }
 
             rb.velocity = v;
