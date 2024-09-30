@@ -1,16 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManagerScript : MonoBehaviour
 {
     private int[,] map;
     public TextAsset stageCSV;
 
+    enum Stage
+    {
+        Space,
+        Block,
+    }
+
+    public GameObject block;
+
     // Start is called before the first frame update
     void Start()
     {
-        LoadCSV();
+        CreateStage();
     }
 
     // Update is called once per frame
@@ -59,6 +68,26 @@ public class GameManagerScript : MonoBehaviour
         else
         {
             Debug.LogError("CSVファイルが指定されていません！");
+        }
+    }
+
+    void CreateStage()
+    {
+        Vector3 position = Vector3.zero;
+        LoadCSV();
+        int lenY = map.GetLength(0);
+        int lenX = map.GetLength(1);
+        for (int x = 0; x < lenX; x++)
+        {
+            position.x = x;
+            for (int y = 0; y < lenY; y++)
+            {
+                position.y = -y + 5;
+                if (map[y, x] == (int)Stage.Block)
+                {
+                    Instantiate(block, position, Quaternion.identity);
+                }
+            }
         }
     }
 }
