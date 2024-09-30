@@ -82,7 +82,7 @@ public class GameManagerScript : MonoBehaviour
             position.x = x;
             for (int y = 0; y < lenY; y++)
             {
-                position.y = -y + 5;
+                position.y = -y + lenY-1;
                 if (map[y, x] == (int)Stage.Block)
                 {
                     Instantiate(block, position, Quaternion.identity);
