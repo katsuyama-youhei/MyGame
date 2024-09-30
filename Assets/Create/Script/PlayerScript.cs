@@ -15,10 +15,13 @@ public class PlayerScript : MonoBehaviour
     private bool isCollisionBlock = true;
 
     public Animator animator;
+
+   
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+       
     }
 
     // Update is called once per frame
@@ -75,7 +78,7 @@ public class PlayerScript : MonoBehaviour
         {
             Vector3 v = rb.velocity;
 
-            if (Input.GetAxis("Jump") != 0)
+            if (Input.GetAxis("Jump") !=0)
             {
                 v.y = jumpForce;
             }
