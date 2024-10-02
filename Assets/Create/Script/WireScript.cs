@@ -13,6 +13,7 @@ public class WireScript : MonoBehaviour
     private LineRenderer lineRenderer;
     public Rigidbody rb;
     public float pullSpeed = 10f;
+    public float releaseJump = 2f;
 
     // Start is called before the first frame update
     void Start()
@@ -126,5 +127,6 @@ public class WireScript : MonoBehaviour
         isGrappling = false;
         rb.useGravity = true;  // d—Í‚ğÄ‚Ñ—LŒø‚É‚·‚é
         lineRenderer.enabled = false;
+        rb.AddForce(Vector3.up * releaseJump, ForceMode.Impulse);
     }
 }
