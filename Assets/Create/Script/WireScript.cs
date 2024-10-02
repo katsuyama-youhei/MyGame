@@ -12,6 +12,7 @@ public class WireScript : MonoBehaviour
     private bool isGrappling = false;
     private LineRenderer lineRenderer;
     public Rigidbody rb;
+    public float pullSpeed = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +70,7 @@ public class WireScript : MonoBehaviour
         {
             grapplePoint = hit.point;
             isGrappling = true;
+            rb.useGravity = false;  // 重力を無効にする
             lineRenderer.enabled = true;
         }
         else
@@ -94,11 +96,19 @@ public class WireScript : MonoBehaviour
     void ApplyGrappleForce()
     {
         Vector3 directionToGrapplePoint = (grapplePoint - transform.position).normalized;
-        float distanceToGrapplePoint = Vector3.Distance(transform.position, grapplePoint);
+        // float distanceToGrapplePoint = Vector3.Distance(transform.position, grapplePoint);
 
         // キャラクターをワイヤーの固定点に引き寄せる力を加える
-        rb.AddForce(directionToGrapplePoint * distanceToGrapplePoint * 10f);
+        // rb.AddForce(directionToGrapplePoint * distanceToGrapplePoint * 10f);
 
+        /*if (distanceToGrapplePoint < 1f)
+        {
+            ReleaseWire();
+        }*/
+
+        rb.velocity = directionToGrapplePoint * pullSpeed;
+
+        float distanceToGrapplePoint = Vector3.Distance(transform.position, grapplePoint);
         if (distanceToGrapplePoint < 1f)
         {
             ReleaseWire();
@@ -114,6 +124,7 @@ public class WireScript : MonoBehaviour
     void ReleaseWire()
     {
         isGrappling = false;
+        rb.useGravity = true;  // 重力を再び有効にする
         lineRenderer.enabled = false;
     }
 }
