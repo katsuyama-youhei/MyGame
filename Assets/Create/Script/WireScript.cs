@@ -12,6 +12,9 @@ public class WireScript : MonoBehaviour
     private Rigidbody playerrb;
     private Vector3 rayTransformPosition;
     private Vector2 rightStick;
+    private Vector2 distance = new Vector2(0.4f, 1f);
+    private bool isVertical = false;
+    private bool isForward = true;
 
     public Transform cameraTransform;
     public float wireRange = 100f;
@@ -23,7 +26,7 @@ public class WireScript : MonoBehaviour
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        playerrb = GetComponent<Rigidbody>();    
+        playerrb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -32,7 +35,8 @@ public class WireScript : MonoBehaviour
         rightStick.x = Input.GetAxis("RightStickHorizontal");
         rightStick.y = Input.GetAxis("RightStickVertical");
         Shoot();
-        Debug.Log(rightStick.x);
+        Debug.Log("rightStickX" + rightStick.x);
+        Debug.Log("rightStickY" + rightStick.y);
     }
 
     private void FixedUpdate()
@@ -72,47 +76,64 @@ public class WireScript : MonoBehaviour
         RaycastHit hit;
         Vector3 direction = transform.forward;
 
-        if (direction.x < 0)
-        {
-            rayTransformPosition = new Vector3(transform.position.x - 0.3f, transform.position.y + 0.7f, transform.position.z);
-        }
-        else
-        {
-            rayTransformPosition = new Vector3(transform.position.x + 0.3f, transform.position.y + 0.7f, transform.position.z);
-        }
+        rayTransformPosition = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
 
-        //Debug.DrawRay(rayTransformPosition, grappleDirection * wireRange, Color.red, 2f);  // レイを赤色で描画
+        if (rightStick.x == 0)
+        {
+            if (rightStick.y == 0)
+            {
+                isVertical = false;
+                if (transform.forward.x > 0)
+                {
+                    isForward = true;
+                }
+                else if(transform.forward.x < 0)
+                {
+                    isForward = false;
+                }
+                else
+                {
+                    if (direction.x > 0)
+                    {
+                        isForward = true;
+                    }
+                    else
+                    {
+                        isForward = false;
+                    }
+                }
+            }else if (rightStick.y > 0)
+            {
+                isVertical=true;
+                isForward = true;
+            }
+            else
+            {
+                isVertical = true;
+                isForward = false;
+            }
+        }else if (rightStick.x > 0)
+        {
+            isVertical = false;
+            isForward = true;
+        }else if(rightStick.x < 0)
+        {
+            isVertical = false;
+            isForward = false;
+        }
 
         Debug.Log("Raycast start position: " + rayTransformPosition);
 
-        if (rightStick.x != 0 || rightStick.y != 0)
+        if (Physics.Raycast(rayTransformPosition, grappleDirection, out hit, wireRange, grappleableLayers))
         {
-          
-            if (Physics.Raycast(rayTransformPosition, grappleDirection, out hit, wireRange, grappleableLayers))
-            {
-                grapplePoint = hit.point;
-                isGrappling = true;
-                playerrb.useGravity = false;
-                lineRenderer.enabled = true;
-            }
-            else
-            {
-                Debug.Log("Raycast missed");
-            }
+            grapplePoint = hit.point;
+            isGrappling = true;
+            playerrb.useGravity = false;
+            lineRenderer.enabled = true;
         }
         else
         {
-            if (Physics.Raycast(rayTransformPosition, transform.forward, out hit, wireRange, grappleableLayers))
-            {
-                grapplePoint = hit.point;
-                isGrappling = true;
-                playerrb.useGravity = false;  // 重力を無効にする
-                lineRenderer.enabled = true;
-            }
-            else
-            {
-                Debug.Log("Raycast missed");
-            }
+            Debug.Log("Raycast missed");
         }
 
         Debug.Log("Raycast grappleposition: " + grapplePoint);
@@ -134,19 +155,40 @@ public class WireScript : MonoBehaviour
     void DrawWire()
     {
         Vector3 rayTransformPosition;
-        Vector3 direction = transform.forward;
-        if (direction.x < 0)
+
+       /* rayTransformPosition = new Vector3(transform.position.x + distance.x, transform.position.y + distance.y, transform.position.z);
+        lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
+        lineRenderer.SetPosition(1, grapplePoint);*/        // ワイヤーの固定位置
+
+        if (isVertical) // 真上or真下
         {
-          
-            rayTransformPosition = new Vector3(transform.position.x - 0.3f, transform.position.y + 0.7f, transform.position.z);
-            lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
-            lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+            if (isForward) // 真上
+            {
+                rayTransformPosition = new Vector3(transform.position.x, transform.position.y + distance.y+0.7f, transform.position.z);
+                lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
+                lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+            }
+            else // 真下
+            {
+                rayTransformPosition = new Vector3(transform.position.x+distance.x, transform.position.y+distance.y, transform.position.z);
+                lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
+                lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+            }
         }
         else
         {
-            rayTransformPosition = new Vector3(transform.position.x + 0.3f, transform.position.y + 0.7f, transform.position.z);
-            lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
-            lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+            if (isForward)
+            {
+                rayTransformPosition = new Vector3(transform.position.x + distance.x, transform.position.y + distance.y, transform.position.z);
+                lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
+                lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+            }
+            else
+            {
+                rayTransformPosition = new Vector3(transform.position.x - distance.x, transform.position.y + distance.y, transform.position.z);
+                lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
+                lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+            }
         }
 
     }
