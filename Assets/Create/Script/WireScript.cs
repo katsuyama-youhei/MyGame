@@ -10,6 +10,7 @@ public class WireScript : MonoBehaviour
     private bool isGrappling = false;
     private LineRenderer lineRenderer;
     private Rigidbody playerrb;
+    private Vector3 rayTransformPosition;
 
     public Transform cameraTransform;
     public float wireRange = 100f;
@@ -68,8 +69,16 @@ public class WireScript : MonoBehaviour
         Vector3 grappleDirection = cameraTransform.TransformDirection(rightStickDirection);
 
         RaycastHit hit;
+        Vector3 direction = transform.forward;
 
-        Vector3 rayTransformPosition = new Vector3(transform.position.x, transform.position.y + 0.7f, transform.position.z);
+        if (direction.x < 0)
+        {
+            rayTransformPosition = new Vector3(transform.position.x - 0.3f, transform.position.y + 0.7f, transform.position.z);
+        }
+        else
+        {
+            rayTransformPosition = new Vector3(transform.position.x + 0.3f, transform.position.y + 0.7f, transform.position.z);
+        }
 
         //Debug.DrawRay(rayTransformPosition, grappleDirection * wireRange, Color.red, 2f);  // ƒŒƒC‚ðÔF‚Å•`‰æ
 
@@ -104,7 +113,7 @@ public class WireScript : MonoBehaviour
             }
         }
 
-
+        Debug.Log("Raycast grappleposition: " + grapplePoint);
     }
 
     void ApplyGrappleForce()
@@ -114,7 +123,7 @@ public class WireScript : MonoBehaviour
         playerrb.velocity = directionToGrapplePoint * pullSpeed;
 
         float distanceToGrapplePoint = Vector3.Distance(transform.position, grapplePoint);
-        if (distanceToGrapplePoint < 1f)
+        if (distanceToGrapplePoint < 2f)
         {
             ReleaseWire();
         }
