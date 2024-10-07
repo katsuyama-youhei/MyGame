@@ -6,26 +6,33 @@ using UnityEngine.UIElements;
 
 public class WireScript : MonoBehaviour
 {
-    public float wireRange = 100f;
-    public LayerMask grappleableLayers;
     private Vector3 grapplePoint;
     private bool isGrappling = false;
     private LineRenderer lineRenderer;
-    public Rigidbody rb;
+    private Rigidbody playerrb;
+
+    public Transform cameraTransform;
+    public float wireRange = 100f;
     public float pullSpeed = 10f;
     public float releaseJump = 2f;
+    public LayerMask grappleableLayers;
 
     // Start is called before the first frame update
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        rb = GetComponent<Rigidbody>();
+        playerrb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Shoot();
+        float rightStickX = Input.GetAxis("RightStickHorizontal");
+        float rightStickY = Input.GetAxis("RightStickVertical");
+
+        Debug.Log("Right Stick X: " + rightStickX);
+        Debug.Log("Right Stick Y: " + rightStickY);
 
     }
 
@@ -46,7 +53,6 @@ public class WireScript : MonoBehaviour
 
         if (isGrappling)
         {
-           // MoveTowardsGrapplePoint();
             DrawWire();
         }
 
@@ -58,39 +64,30 @@ public class WireScript : MonoBehaviour
 
     void ShootWire()
     {
+        float rightStickX = Input.GetAxis("RightStickHorizontal");
+        float rightStickY = Input.GetAxis("RightStickVertical");
+
+        Vector3 rightStickDirection = new Vector3(rightStickX, rightStickY, 0).normalized;
+        Vector3 grappleDirection = cameraTransform.TransformDirection(rightStickDirection);
+
         RaycastHit hit;
 
-        Vector3 rayDirection = transform.forward;
         Vector3 rayTransformPosition = new Vector3(transform.position.x, transform.position.y + 0.7f, transform.position.z);
 
-        Debug.DrawRay(rayTransformPosition, rayDirection * wireRange, Color.red, 2f);  // レイを赤色で描画
+        Debug.DrawRay(rayTransformPosition, grappleDirection * wireRange, Color.red, 2f);  // レイを赤色で描画
 
         Debug.Log("Raycast start position: " + rayTransformPosition);
 
-        if (Physics.Raycast(rayTransformPosition, transform.forward, out hit, wireRange, grappleableLayers))
+        if (Physics.Raycast(rayTransformPosition, grappleDirection, out hit, wireRange, grappleableLayers))
         {
             grapplePoint = hit.point;
             isGrappling = true;
-            rb.useGravity = false;  // 重力を無効にする
+            playerrb.useGravity = false;
             lineRenderer.enabled = true;
         }
         else
         {
             Debug.Log("Raycast missed");
-        }
-
-    }
-
-    void MoveTowardsGrapplePoint()
-    {
-        // 自機をワイヤーのポイントに引き寄せる
-        Vector3 moveDirection = grapplePoint - transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, grapplePoint, Time.deltaTime * 10f);
-
-        // 接近しすぎたらワイヤーを解除
-        if (Vector3.Distance(transform.position, grapplePoint) < 1f)
-        {
-            ReleaseWire();
         }
     }
 
@@ -107,7 +104,7 @@ public class WireScript : MonoBehaviour
             ReleaseWire();
         }*/
 
-        rb.velocity = directionToGrapplePoint * pullSpeed;
+        playerrb.velocity = directionToGrapplePoint * pullSpeed;
 
         float distanceToGrapplePoint = Vector3.Distance(transform.position, grapplePoint);
         if (distanceToGrapplePoint < 1f)
@@ -125,8 +122,8 @@ public class WireScript : MonoBehaviour
     void ReleaseWire()
     {
         isGrappling = false;
-        rb.useGravity = true;  // 重力を再び有効にする
+        playerrb.useGravity = true;
         lineRenderer.enabled = false;
-        rb.AddForce(Vector3.up * releaseJump, ForceMode.Impulse);
+        playerrb.AddForce(Vector3.up * releaseJump, ForceMode.Impulse);
     }
 }
