@@ -35,8 +35,6 @@ public class WireScript : MonoBehaviour
         rightStick.x = Input.GetAxis("RightStickHorizontal");
         rightStick.y = Input.GetAxis("RightStickVertical");
         Shoot();
-        Debug.Log("rightStickX" + rightStick.x);
-        Debug.Log("rightStickY" + rightStick.y);
     }
 
     private void FixedUpdate()
@@ -175,10 +173,6 @@ public class WireScript : MonoBehaviour
     void DrawWire()
     {
         Vector3 rayTransformPosition;
-
-        /* rayTransformPosition = new Vector3(transform.position.x + distance.x, transform.position.y + distance.y, transform.position.z);
-         lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
-         lineRenderer.SetPosition(1, grapplePoint);*/        // ワイヤーの固定位置
 
         if (isVertical) // 真上or真下
         {
