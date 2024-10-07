@@ -11,6 +11,7 @@ public class WireScript : MonoBehaviour
     private LineRenderer lineRenderer;
     private Rigidbody playerrb;
     private Vector3 rayTransformPosition;
+    private Vector2 rightStick;
 
     public Transform cameraTransform;
     public float wireRange = 100f;
@@ -22,13 +23,16 @@ public class WireScript : MonoBehaviour
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        playerrb = GetComponent<Rigidbody>();
+        playerrb = GetComponent<Rigidbody>();    
     }
 
     // Update is called once per frame
     void Update()
     {
+        rightStick.x = Input.GetAxis("RightStickHorizontal");
+        rightStick.y = Input.GetAxis("RightStickVertical");
         Shoot();
+        Debug.Log(rightStick.x);
     }
 
     private void FixedUpdate()
@@ -62,10 +66,7 @@ public class WireScript : MonoBehaviour
 
     void ShootWire()
     {
-        float rightStickX = Input.GetAxis("RightStickHorizontal");
-        float rightStickY = Input.GetAxis("RightStickVertical");
-
-        Vector3 rightStickDirection = new Vector3(rightStickX, rightStickY, 0).normalized;
+        Vector3 rightStickDirection = new Vector3(rightStick.x, rightStick.y, 0).normalized;
         Vector3 grappleDirection = cameraTransform.TransformDirection(rightStickDirection);
 
         RaycastHit hit;
@@ -84,8 +85,9 @@ public class WireScript : MonoBehaviour
 
         Debug.Log("Raycast start position: " + rayTransformPosition);
 
-        if (rightStickX != 0 || rightStickY != 0)
+        if (rightStick.x != 0 || rightStick.y != 0)
         {
+          
             if (Physics.Raycast(rayTransformPosition, grappleDirection, out hit, wireRange, grappleableLayers))
             {
                 grapplePoint = hit.point;
@@ -133,9 +135,9 @@ public class WireScript : MonoBehaviour
     {
         Vector3 rayTransformPosition;
         Vector3 direction = transform.forward;
-
         if (direction.x < 0)
         {
+          
             rayTransformPosition = new Vector3(transform.position.x - 0.3f, transform.position.y + 0.7f, transform.position.z);
             lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
             lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
