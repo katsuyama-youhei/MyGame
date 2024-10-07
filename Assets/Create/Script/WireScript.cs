@@ -122,9 +122,22 @@ public class WireScript : MonoBehaviour
 
     void DrawWire()
     {
-        Vector3 rayTransformPosition = new Vector3(transform.position.x, transform.position.y + 0.7f, transform.position.z);
-        lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
-        lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+        Vector3 rayTransformPosition;
+        Vector3 direction = transform.forward;
+
+        if (direction.x < 0)
+        {
+            rayTransformPosition = new Vector3(transform.position.x - 0.3f, transform.position.y + 0.7f, transform.position.z);
+            lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
+            lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+        }
+        else
+        {
+            rayTransformPosition = new Vector3(transform.position.x + 0.3f, transform.position.y + 0.7f, transform.position.z);
+            lineRenderer.SetPosition(0, rayTransformPosition);  // 自機の位置
+            lineRenderer.SetPosition(1, grapplePoint);        // ワイヤーの固定位置
+        }
+
     }
 
     void ReleaseWire()
