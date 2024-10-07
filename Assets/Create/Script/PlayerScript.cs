@@ -12,29 +12,37 @@ public class PlayerScript : MonoBehaviour
     
     private Rigidbody rb;
     private float distance = 0.72f;
-    private bool isCollisionBlock = true;
+    public bool isCollisionBlock = true;
 
     public Animator animator;
 
+    private WireScript wireScript;
    
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-       
+        wireScript=GetComponent<WireScript>();
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // ƒŒƒC‚ð‚µ‚½•ûŒü‚É”ò‚Î‚·
-        Vector3 rayPosition = transform.position + new Vector3(0.0f, 0.7f, 0.0f);
+        Vector3 rayPosition = transform.position + new Vector3(0.0f, 0.4f, 0.0f);
         Ray ray = new Ray(rayPosition, Vector3.down);
+        Debug.DrawRay(rayPosition, Vector3.down * distance, Color.red);
         isCollisionBlock = Physics.Raycast(ray, distance);
 
         if (isCollisionBlock)
         {
             Jump();
+        }
+        else
+        {
+            wireScript.Shoot();
         }
     }
 
@@ -74,11 +82,11 @@ public class PlayerScript : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetAxis("Jump") != 0)
+        if (Input.GetAxis("Fire1") != 0)
         {
             Vector3 v = rb.velocity;
 
-            if (Input.GetAxis("Jump") !=0)
+            if (Input.GetAxis("Fire1") !=0)
             {
                 v.y = jumpForce;
             }

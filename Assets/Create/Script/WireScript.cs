@@ -22,11 +22,14 @@ public class WireScript : MonoBehaviour
     public float releaseJump = 2f;
     public LayerMask grappleableLayers;
 
+    //private PlayerScript playerScript;
+
     // Start is called before the first frame update
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
         playerrb = GetComponent<Rigidbody>();
+       //playerScript = GetComponent<PlayerScript>();
     }
 
     // Update is called once per frame
@@ -34,7 +37,11 @@ public class WireScript : MonoBehaviour
     {
         rightStick.x = Input.GetAxis("RightStickHorizontal");
         rightStick.y = Input.GetAxis("RightStickVertical");
-        Shoot();
+        /*if (!playerScript.isCollisionBlock)
+        {
+            Debug.Log("CollisionBlock");
+            Shoot();
+        }*/
     }
 
     private void FixedUpdate()
@@ -45,9 +52,9 @@ public class WireScript : MonoBehaviour
         }
     }
 
-    void Shoot()
+    public void Shoot()
     {
-        if (Input.GetAxis("Fire1") != 0)
+        if (Input.GetButtonDown("Fire1"))
         {
             if (!isGrappling)
             {
