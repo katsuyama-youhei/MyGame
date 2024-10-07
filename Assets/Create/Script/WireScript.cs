@@ -42,7 +42,10 @@ public class WireScript : MonoBehaviour
     {
         if (Input.GetAxis("Fire1") != 0)
         {
-            ShootWire();
+            if (!isGrappling)
+            {
+                ShootWire();
+            }
         }
 
         if (isGrappling)
@@ -72,7 +75,7 @@ public class WireScript : MonoBehaviour
 
         Debug.Log("Raycast start position: " + rayTransformPosition);
 
-        if(rightStickX !=0||rightStickY !=0)
+        if (rightStickX != 0 || rightStickY != 0)
         {
             if (Physics.Raycast(rayTransformPosition, grappleDirection, out hit, wireRange, grappleableLayers))
             {
@@ -100,22 +103,13 @@ public class WireScript : MonoBehaviour
                 Debug.Log("Raycast missed");
             }
         }
-       
-        
+
+
     }
 
     void ApplyGrappleForce()
     {
         Vector3 directionToGrapplePoint = (grapplePoint - transform.position).normalized;
-        // float distanceToGrapplePoint = Vector3.Distance(transform.position, grapplePoint);
-
-        // キャラクターをワイヤーの固定点に引き寄せる力を加える
-        // rb.AddForce(directionToGrapplePoint * distanceToGrapplePoint * 10f);
-
-        /*if (distanceToGrapplePoint < 1f)
-        {
-            ReleaseWire();
-        }*/
 
         playerrb.velocity = directionToGrapplePoint * pullSpeed;
 
