@@ -22,6 +22,8 @@ public class WireScript : MonoBehaviour
     public float releaseJump = 2f;
     public LayerMask grappleableLayers;
 
+    public GameObject cursor;
+
     //private PlayerScript playerScript;
 
     // Start is called before the first frame update
@@ -42,6 +44,15 @@ public class WireScript : MonoBehaviour
             Debug.Log("CollisionBlock");
             Shoot();
         }*/
+        if (isGrappling)
+        {
+            DrawWire();
+        }
+
+        if (Input.GetAxis("Fire3") != 0)  // ワイヤーを解除する
+        {
+            StopGrapple();
+        }
     }
 
     private void FixedUpdate()
@@ -60,16 +71,6 @@ public class WireScript : MonoBehaviour
             {
                 ShootWire();
             }
-        }
-
-        if (isGrappling)
-        {
-            DrawWire();
-        }
-
-        if (Input.GetAxis("Fire3") != 0)  // ワイヤーを解除する
-        {
-            StopGrapple();
         }
     }
 
@@ -140,6 +141,7 @@ public class WireScript : MonoBehaviour
                 isGrappling = true;
                 playerrb.useGravity = false;
                 lineRenderer.enabled = true;
+                cursor.SetActive(false);
             }
             else
             {
@@ -154,6 +156,7 @@ public class WireScript : MonoBehaviour
                 isGrappling = true;
                 playerrb.useGravity = false;
                 lineRenderer.enabled = true;
+                cursor.SetActive(false);
             }
             else
             {
@@ -220,6 +223,7 @@ public class WireScript : MonoBehaviour
         playerrb.useGravity = true;
         lineRenderer.enabled = false;
         playerrb.AddForce(Vector3.up * releaseJump, ForceMode.Impulse);
+        cursor.SetActive(true);
     }
 
     void StopGrapple()
@@ -227,5 +231,6 @@ public class WireScript : MonoBehaviour
         isGrappling = false;
         playerrb.useGravity = true;
         lineRenderer.enabled = false;
+        cursor.SetActive(true);
     }
 }

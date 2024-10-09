@@ -33,7 +33,6 @@ public class PlayerScript : MonoBehaviour
         // ƒŒƒC‚ð‚µ‚½•ûŒü‚É”ò‚Î‚·
         Vector3 rayPosition = transform.position + new Vector3(0.0f, 0.4f, 0.0f);
         Ray ray = new Ray(rayPosition, Vector3.down);
-        Debug.DrawRay(rayPosition, Vector3.down * distance, Color.red);
         isCollisionBlock = Physics.Raycast(ray, distance);
 
         if (isCollisionBlock)
@@ -54,7 +53,7 @@ public class PlayerScript : MonoBehaviour
     void Move()
     {
         float move = Input.GetAxis("Horizontal");
-        
+
         if (move < 0)
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
