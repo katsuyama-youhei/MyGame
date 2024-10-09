@@ -141,7 +141,7 @@ public class WireScript : MonoBehaviour
                 isGrappling = true;
                 playerrb.useGravity = false;
                 lineRenderer.enabled = true;
-                cursor.SetActive(false);
+                //cursor.SetActive(false);
             }
             else
             {
@@ -156,7 +156,7 @@ public class WireScript : MonoBehaviour
                 isGrappling = true;
                 playerrb.useGravity = false;
                 lineRenderer.enabled = true;
-                cursor.SetActive(false);
+                //cursor.SetActive(false);
             }
             else
             {
@@ -223,7 +223,7 @@ public class WireScript : MonoBehaviour
         playerrb.useGravity = true;
         lineRenderer.enabled = false;
         playerrb.AddForce(Vector3.up * releaseJump, ForceMode.Impulse);
-        cursor.SetActive(true);
+        //cursor.SetActive(true);
     }
 
     void StopGrapple()
@@ -231,6 +231,6 @@ public class WireScript : MonoBehaviour
         isGrappling = false;
         playerrb.useGravity = true;
         lineRenderer.enabled = false;
-        cursor.SetActive(true);
+        //cursor.SetActive(true);
     }
 }
