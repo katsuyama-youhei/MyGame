@@ -9,7 +9,7 @@ public class PlayerScript : MonoBehaviour
     public float jumpForce = 1.0f;
     public float moveSpeed = 1.0f; // ˆÚ“®‘¬“x
     public float forceMultiplier = 1f;
-    
+
     private Rigidbody rb;
     private float distance = 0.72f;
     public bool isCollisionBlock = true;
@@ -17,12 +17,12 @@ public class PlayerScript : MonoBehaviour
     public Animator animator;
 
     private WireScript wireScript;
-   
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        wireScript=GetComponent<WireScript>();
+        wireScript = GetComponent<WireScript>();
 
 
     }
@@ -39,10 +39,10 @@ public class PlayerScript : MonoBehaviour
         {
             Jump();
         }
-        else
-        {
-            wireScript.Shoot();
-        }
+
+
+        wireScript.Shoot();
+
     }
 
     private void FixedUpdate()
@@ -81,11 +81,11 @@ public class PlayerScript : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetAxis("Fire1") != 0)
+        if (Input.GetAxis("Jump") != 0)
         {
             Vector3 v = rb.velocity;
 
-            if (Input.GetAxis("Fire1") !=0)
+            if (Input.GetAxis("Jump") != 0)
             {
                 v.y = jumpForce;
             }
