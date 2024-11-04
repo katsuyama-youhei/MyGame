@@ -141,6 +141,9 @@ public class WireScript : MonoBehaviour
                 isGrappling = true;
                 playerrb.useGravity = false;
                 lineRenderer.enabled = true;
+                string hittag = hit.collider.tag;
+
+                Debug.Log("Hit object tag : " + hittag);
                 //cursor.SetActive(false);
             }
             else
