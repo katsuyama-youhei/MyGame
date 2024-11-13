@@ -12,9 +12,17 @@ public class GameManagerScript : MonoBehaviour
     {
         Space,
         Block,
+        Enemy,
+        SlopeLow,
+        SlopeCentred,
+        SlopeHigh,
     }
 
     public GameObject block;
+    public GameObject enemy;
+    public GameObject slopeLow;
+    public GameObject slopeCentred;
+    public GameObject slopeHigh;
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +94,20 @@ public class GameManagerScript : MonoBehaviour
                 if (map[y, x] == (int)Stage.Block)
                 {
                     Instantiate(block, position, Quaternion.identity);
+                }else if(map[y, x] == (int)Stage.Enemy)
+                {
+                    Instantiate(enemy, position, Quaternion.identity);
+                }else if(map[y, x] == (int)Stage.SlopeLow)
+                {
+                    Instantiate(slopeLow, position, Quaternion.identity);
+                }
+                else if (map[y, x] == (int)Stage.SlopeCentred)
+                {
+                    Instantiate(slopeCentred, position, Quaternion.identity);
+                }
+                else if (map[y, x] == (int)Stage.SlopeHigh)
+                {
+                    Instantiate(slopeHigh, position, Quaternion.identity);
                 }
             }
         }

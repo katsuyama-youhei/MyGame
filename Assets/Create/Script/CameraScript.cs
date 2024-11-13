@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     public GameObject player;
+    public Vector3 distance;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +18,8 @@ public class CameraScript : MonoBehaviour
         var playerPosition = player.transform.position;
         var position = transform.position;
         position.x = playerPosition.x;
-        position.y = playerPosition.y + 2;
-        position.z = playerPosition.z - 15;
+        position.y = playerPosition.y + distance.y;
+        position.z = playerPosition.z - distance.z;
         transform.position = position;
     }
 }
