@@ -10,16 +10,16 @@ public class GameManagerScript : MonoBehaviour
 
     enum Stage
     {
-        Space,
-        Block,
-        Enemy,
-        SlopeLow,
-        SlopeCentred,
-        SlopeHigh,
+        SPACE,
+        BLOCK,
+        ACCELERATION,
+        SLOPE_LOW,
+        SLOPE_CENTRED,
+        SLOPE_HIGH,
     }
 
     public GameObject block;
-    public GameObject enemy;
+    public GameObject acceleration;
     public GameObject slopeLow;
     public GameObject slopeCentred;
     public GameObject slopeHigh;
@@ -91,21 +91,22 @@ public class GameManagerScript : MonoBehaviour
             for (int y = 0; y < lenY; y++)
             {
                 position.y = -y + lenY-1;
-                if (map[y, x] == (int)Stage.Block)
+                if (map[y, x] == (int)Stage.BLOCK)
                 {
                     Instantiate(block, position, Quaternion.identity);
-                }else if(map[y, x] == (int)Stage.Enemy)
+                }else if(map[y, x] == (int)Stage.ACCELERATION)
                 {
-                    Instantiate(enemy, position, Quaternion.identity);
-                }else if(map[y, x] == (int)Stage.SlopeLow)
+                    Vector3 a = new Vector3(0, 180, 0);
+                    Instantiate(acceleration, position, Quaternion.identity);
+                }else if(map[y, x] == (int)Stage.SLOPE_LOW)
                 {
                     Instantiate(slopeLow, position, Quaternion.identity);
                 }
-                else if (map[y, x] == (int)Stage.SlopeCentred)
+                else if (map[y, x] == (int)Stage.SLOPE_CENTRED)
                 {
                     Instantiate(slopeCentred, position, Quaternion.identity);
                 }
-                else if (map[y, x] == (int)Stage.SlopeHigh)
+                else if (map[y, x] == (int)Stage.SLOPE_HIGH)
                 {
                     Instantiate(slopeHigh, position, Quaternion.identity);
                 }

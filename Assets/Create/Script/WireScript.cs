@@ -177,7 +177,7 @@ public class WireScript : MonoBehaviour
         playerrb.velocity = directionToGrapplePoint * pullSpeed;
 
         float distanceToGrapplePoint = Vector3.Distance(transform.position, grapplePoint);
-        if (distanceToGrapplePoint < 2f)
+        if (distanceToGrapplePoint < 1f)
         {
             ReleaseWire();
         }
