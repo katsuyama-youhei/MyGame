@@ -13,16 +13,19 @@ public class GameManagerScript : MonoBehaviour
         SPACE,
         BLOCK,
         ACCELERATION,
-        SLOPE_LOW,
-        SLOPE_CENTRED,
-        SLOPE_HIGH,
+        UP_SLOPE_LOW,
+        UP_SLOPE_CENTRED,
+        UP_SLOPE_HIGH,
+        DOWN_SLOPE_LOW,
+        DOWN_SLOPE_CENTRED,
+        DOWN_SLOPE_HIGH,
     }
 
     public GameObject block;
     public GameObject acceleration;
-    public GameObject slopeLow;
-    public GameObject slopeCentred;
-    public GameObject slopeHigh;
+    public GameObject SlopeLow;
+    public GameObject SlopeCentred;
+    public GameObject SlopeHigh;
 
     // Start is called before the first frame update
     void Start()
@@ -85,6 +88,7 @@ public class GameManagerScript : MonoBehaviour
         LoadCSV();
         int lenY = map.GetLength(0);
         int lenX = map.GetLength(1);
+        Quaternion rotation = Quaternion.Euler(0, 180, 0);
         for (int x = 0; x < lenX; x++)
         {
             position.x = x;
@@ -96,19 +100,30 @@ public class GameManagerScript : MonoBehaviour
                     Instantiate(block, position, Quaternion.identity);
                 }else if(map[y, x] == (int)Stage.ACCELERATION)
                 {
-                    Vector3 a = new Vector3(0, 180, 0);
                     Instantiate(acceleration, position, Quaternion.identity);
-                }else if(map[y, x] == (int)Stage.SLOPE_LOW)
+                }else if(map[y, x] == (int)Stage.UP_SLOPE_LOW)
                 {
-                    Instantiate(slopeLow, position, Quaternion.identity);
+                    Instantiate(SlopeLow, position, rotation);
                 }
-                else if (map[y, x] == (int)Stage.SLOPE_CENTRED)
+                else if (map[y, x] == (int)Stage.UP_SLOPE_CENTRED)
                 {
-                    Instantiate(slopeCentred, position, Quaternion.identity);
+                    Instantiate(SlopeCentred, position, rotation);
                 }
-                else if (map[y, x] == (int)Stage.SLOPE_HIGH)
+                else if (map[y, x] == (int)Stage.UP_SLOPE_HIGH)
                 {
-                    Instantiate(slopeHigh, position, Quaternion.identity);
+                    Instantiate(SlopeHigh, position, rotation);
+                }
+                else if (map[y, x] == (int)Stage.DOWN_SLOPE_LOW)
+                {
+                    Instantiate(SlopeLow, position, Quaternion.identity);
+                }
+                else if (map[y, x] == (int)Stage.DOWN_SLOPE_CENTRED)
+                {
+                    Instantiate(SlopeCentred, position, Quaternion.identity);
+                }
+                else if (map[y, x] == (int)Stage.DOWN_SLOPE_HIGH)
+                {
+                    Instantiate(SlopeHigh, position, Quaternion.identity);
                 }
             }
         }
