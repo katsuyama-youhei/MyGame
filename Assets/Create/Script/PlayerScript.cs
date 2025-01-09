@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -18,13 +19,13 @@ public class PlayerScript : MonoBehaviour
 
     private WireScript wireScript;
 
+    public GameObject canvas;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         wireScript = GetComponent<WireScript>();
-
-
     }
 
     // Update is called once per frame
@@ -42,6 +43,11 @@ public class PlayerScript : MonoBehaviour
 
 
         wireScript.Shoot();
+
+        if (transform.position.y <= -5)
+        {
+            canvas.SetActive(true);
+        }
 
     }
 
