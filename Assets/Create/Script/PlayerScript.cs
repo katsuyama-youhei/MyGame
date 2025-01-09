@@ -85,10 +85,7 @@ public class PlayerScript : MonoBehaviour
         {
             Vector3 v = rb.velocity;
 
-            if (Input.GetAxis("Jump") != 0)
-            {
-                v.y = jumpForce;
-            }
+            v.y = jumpForce;
 
             rb.velocity = v;
         }
